@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 
 class PostContent extends StatelessWidget {
   final String title;
@@ -12,6 +12,7 @@ class PostContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(body);
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -32,9 +33,21 @@ class PostContent extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Center(
-          child: Html(
-            data: body,
-          ),
+          child: body.isNotEmpty
+              ? HtmlWidget(
+                  body,
+                  customStylesBuilder: (element) {
+                    if (element.localName == 'div') {
+                      return {'padding-top': '20px'};
+                    }
+                    if (element.localName == 'p') {
+                      return {'padding-top': '10px'};
+                    }
+
+                    return null;
+                  },
+                )
+              : const Text("hi"),
         ),
       ),
     );
